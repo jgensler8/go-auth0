@@ -5,10 +5,6 @@ info:
   description: "A Swagger definition for Auth0"
   title: "Auth0"
 basePath: "/"
-consumes:
-- application/json
-produces:
-- application/json
 host: OVERRIDE-ME-IN-CODE.auth0.com
 schemes:
   - https
@@ -20,12 +16,40 @@ securityDefinitions:
 paths:
   "/userinfo":
     get:
+      produces:
+      - application/json
       security:
         - Bearer: []
       description: Create a consumer
       responses:
         '200':
           description: Consumer was created
+          schema:
+            $ref: '#/definitions/UserInfo'
+  "/pem":
+    get:
+      operationId: getPEM
+      # produces:
+      # - application/octet-stream
+      responses:
+        '200':
+          description: Signing Certificate
+          schema:
+            type: file
+            # $ref: '#/responses/streaming'
+          # examples:
+          #   Signing Certificate: |
+          #     -----BEGIN CERTIFICATE-----
+          #     MIIDBTCCAe2gAwIBAgIJBPIX6UPpVxCsMA0GCSqGSIb3DQEBCwUAMCAxHjAcBgNV
+          #     ...
+          #     c88sSrrE9Ta6
+          #     -----END CERTIFICATE-----
+responses:
+  streaming:
+    description: Streamed file content
+    schema:
+      type: string
+      format: binary
 definitions:
   UserInfo:
     description: "Someone that interacts with the API"
